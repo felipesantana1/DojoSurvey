@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 
 app = Flask(__name__)
+app.secret_key = 'KeepItSecretKeepItSafe'
 
 @app.route('/')
 
@@ -14,6 +15,13 @@ def showResult():
     x = request.form['location']
     z = request.form['language']
     n = request.form['comment']
-    return render_template('result.html', name = y, location = x, fl = z, text = n)
+    if len(request.form['name']) < 1:
+        flash('Must fill out al text areas!')
+        return render_template('error.html')
+    elif len(request.form['comment']) < 1:
+        flash('Must fill out al text areas!')
+        return render_template('error.html')
+    else:
+        return render_template('result.html', name = y, location = x, fl = z, text = n)
 
 app.run(debug=True)
